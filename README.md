@@ -1,2 +1,2 @@
-# KoffeeCupLogger 2019 IPRO
+# KoffeeCup Logger
 Management system for tracking reusable coffee tumblers.
