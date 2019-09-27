@@ -1,0 +1,17 @@
+# Mug tags take format of K123456
+# Tracking name of user, date and location of purchase,and their card info
+Test: Not empty!
+
+checkedOut:
+
+ - tag: K000001
+   drinker: John Smith
+   location: Chicago
+   date: 09/20/19
+   card: 1234 5678 91011
+
+ - tag: k000002
+   drinker: Mike Anderson 
+   location: Atlanta 
+   date: 08/28/19
+   card: 4234 5978 11014
