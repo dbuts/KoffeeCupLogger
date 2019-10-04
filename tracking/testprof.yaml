@@ -7,11 +7,11 @@ checkedOut:
  - tag: K000001
    drinker: John Smith
    location: Chicago
-   date: 09/20/19
+   date: 2019.09.27 11:37:02 
    card: 1234 5678 91011
 
  - tag: k000002
    drinker: Mike Anderson 
    location: Atlanta 
-   date: 08/28/19
+   date: 2019.03.01 12:21:03 
    card: 4234 5978 11014

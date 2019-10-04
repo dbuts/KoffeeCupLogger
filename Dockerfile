@@ -2,12 +2,15 @@ FROM golang:1.8
 
 MAINTAINER David Butler
 
-WORKDIR $GOPATH/src/dbuts/KoffeeCupLogger 
-COPY . .
+RUN mkdir /app
+ADD . /app
+
+WORKDIR /app
 
 RUN go get -d -v ./...
-RUN go install -v ./...
 
 EXPOSE 8080
 
-CMD ["./go/src/main"]
+RUN go build -o main ./go/src
+
+CMD ["/app/main"]

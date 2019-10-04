@@ -2,17 +2,18 @@ package main
 
 import (
 	"fmt"
-	"bufio"
-	"os"
+//	"bufio"
+//	"os"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"path/filepath"
+	"time"
 )
 
 type Config struct{
 	Test string `yaml:"Test"`
 	Rentals []Rental `yaml:"checkedOut"`
-} 
+}
 
 
 type Rental struct{
@@ -24,13 +25,11 @@ type Rental struct{
 }
 
 func main() {
-	fmt.Print("Koffee Member Name: ")
-	reader := bufio.NewReader(os.Stdin)
-	text, _ := reader.ReadString('\n')
-	fmt.Println("What's good, " + text + "?")
+	currentTime := time.Now()
 
-	filename, _ := filepath.Abs("/home/david/Development/KoffeeCupLogger/tracking/testprof.yaml")
-	fmt.Println("Directory: " + filename)
+	fmt.Println("Today's Date is: "+ currentTime.Format("2006.01.02 15:04:05"))
+
+	filename, _ := filepath.Abs("./tracking/testprof.yaml")
 	yamlFile, err := ioutil.ReadFile(filename)
 	if err != nil {
 		fmt.Println("ERROR 1")
@@ -45,5 +44,16 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("\n%#v\n", config)
+	getCheckedOut(&config)
+}
+
+func getCheckedOut(config *Config){
+	fmt.Println("Checked Out Containers: ")
+	for i:=0; i<len((*config).Rentals); i++{
+		fmt.Println((*config).Rentals[i].Tag)
+	}
+}
+
+func checkOut(config *Config, rental Rental){
+
 }
