@@ -11,7 +11,6 @@ import (
 )
 
 type Config struct{
-	Test string `yaml:"Test"`
 	Rentals []Rental `yaml:"checkedOut"`
 	Returned []Rental `yaml:"returned"`
 }
@@ -47,6 +46,10 @@ func main() {
 
 	getCheckedOut(&config)
 	getReturned(&config)
+	fmt.Println("Checking in Cup K000002.")
+	checkIn(&config, "K000002")
+	getReturned(&config)
+	getCheckedOut(&config)
 }
 
 func getCheckedOut(config *Config){
@@ -68,31 +71,20 @@ func checkOut(config *Config, rental Rental){
 }
 
 func checkIn(config *Config, tag string){
-	for i:=len((*config).Rentals); i>=0; i--{
+	fmt.Println("ENTERED CHECKIN")
+	for i:=len((*config).Rentals)-1; i>=0; i--{
 		if (*config).Rentals[i].Tag == tag{
-			//TODO move Rental struct from checkedOut to checkedIn in the yaml	
-		}
-	}
+			//Store rental in temporary variable
+			temp := (*config).Rentals[i]
+			fmt.Println(temp)
+			//Copy last Rental over Rental at ith position
+			length := len((*config).Rentals)
+			(*config).Rentals[i] = (*config).Rentals[length-1]
+			//Truncate last element
+			(*config).Rentals =(*config).Rentals[:length-1]
+
+			//Move into returned
+			(*config).Returned = append((*config).Returned, temp)
+		} }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
