@@ -67,7 +67,7 @@ func getReturned(config *Config){
 }
 
 func checkOut(config *Config, rental Rental){
-	//TODO add Rental struct to checkedOut in yaml	
+	(*config).Rentals = append((*config).Rentals, rental)
 }
 
 func checkIn(config *Config, tag string){
