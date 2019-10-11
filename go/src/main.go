@@ -13,6 +13,7 @@ import (
 type Config struct{
 	Test string `yaml:"Test"`
 	Rentals []Rental `yaml:"checkedOut"`
+	Returned []Rental `yaml:"returned"`
 }
 
 
@@ -45,6 +46,7 @@ func main() {
 	}
 
 	getCheckedOut(&config)
+	getReturned(&config)
 }
 
 func getCheckedOut(config *Config){
@@ -54,6 +56,43 @@ func getCheckedOut(config *Config){
 	}
 }
 
+func getReturned(config *Config){
+	fmt.Println("Returned Containers: ")
+	for i:=0; i<len((*config).Returned); i++{
+		fmt.Println((*config).Returned[i].Tag)
+	}
+}
+
 func checkOut(config *Config, rental Rental){
+	//TODO add Rental struct to checkedOut in yaml	
+}
+
+func checkIn(config *Config, tag string){
+	for i:=len((*config).Rentals); i>=0; i--{
+		if (*config).Rentals[i].Tag == tag{
+			//TODO move Rental struct from checkedOut to checkedIn in the yaml	
+		}
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

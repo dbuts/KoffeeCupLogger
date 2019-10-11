@@ -15,3 +15,11 @@ checkedOut:
    location: Atlanta 
    date: 2019.03.01 12:21:03 
    card: 4234 5978 11014
+
+returned:
+
+ - tag: k000000
+   drinker: David Butler
+   location: Chicago 
+   date: 2019.03.04 10:23:23 
+   card: 8224 5027 14092
