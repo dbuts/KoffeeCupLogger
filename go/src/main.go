@@ -3,11 +3,14 @@ package main
 import (
 	"fmt"
 //	"bufio"
-//	"os"
+	"os"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"path/filepath"
 	"time"
+	"math/rand"
+	"strconv"
+	"log"
 )
 
 type Config struct{
@@ -29,27 +32,54 @@ func main() {
 
 	fmt.Println("Today's Date is: "+ currentTime.Format("2006.01.02 15:04:05"))
 
-	filename, _ := filepath.Abs("./tracking/testprof.yaml")
+	filename, _ := filepath.Abs("./tracking/presentation.yaml")
 	yamlFile, err := ioutil.ReadFile(filename)
 	if err != nil {
-		fmt.Println("ERROR 1")
-		panic(err)
+		log.Fatal(err)
 	}
 
 	var config Config
 
 	err = yaml.Unmarshal(yamlFile, &config)
 	if err != nil {
-		fmt.Println("ERROR 2")
-		panic(err)
+		log.Fatal(err)
 	}
 
+	//Testing operations
 	getCheckedOut(&config)
 	getReturned(&config)
 	fmt.Println("Checking in Cup K000002.")
 	checkIn(&config, "K000002")
 	getReturned(&config)
+	fmt.Println("Checking out Random.")
+	var temp Rental = getRandRental()
+	checkOut(&config, temp)
 	getCheckedOut(&config)
+
+	//Create backup of yaml and create updated version
+	backup_name := filename[:len(filename)-4] + "_backup.yaml"
+	err = os.Rename(filename, backup_name)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//Marshal config back into the .yaml
+	d, err1 := yaml.Marshal(&config)
+	if err1 !=nil {
+		log.Fatal(err1)
+	} else {
+		os.Remove(filename)
+		file, err2 := os.Create(filename)
+		if err2 !=nil {
+			log.Fatal(err2)
+		}
+		text, err5 := file.Write(d)
+		if err5 != nil {
+			fmt.Println(text)
+			log.Fatal(err5)
+		}
+		fmt.Println("Check the .yaml")
+	}
+
 }
 
 func getCheckedOut(config *Config){
@@ -71,12 +101,10 @@ func checkOut(config *Config, rental Rental){
 }
 
 func checkIn(config *Config, tag string){
-	fmt.Println("ENTERED CHECKIN")
 	for i:=len((*config).Rentals)-1; i>=0; i--{
 		if (*config).Rentals[i].Tag == tag{
 			//Store rental in temporary variable
 			temp := (*config).Rentals[i]
-			fmt.Println(temp)
 			//Copy last Rental over Rental at ith position
 			length := len((*config).Rentals)
 			(*config).Rentals[i] = (*config).Rentals[length-1]
@@ -85,6 +113,23 @@ func checkIn(config *Config, tag string){
 
 			//Move into returned
 			(*config).Returned = append((*config).Returned, temp)
-		} }
+		}
+	}
+}
 
+func getRandRental() Rental{
+	first_names := []string{"David","John","Jeff","Tom","Michael","Bill","Edward"}
+	last_names  := []string{"Smith","Butler","Jackson","Walters","Arrigoni","Johnson"}
+	rand.Seed(time.Now().Unix())
+
+	var temp Rental
+
+	temp.Tag = "K" + strconv.Itoa(rand.Intn(599999))
+	temp.Drinker = first_names[rand.Intn(len(first_names))] + " " +last_names[rand.Intn(len(last_names))]
+	temp.Location = "Chicago"
+	currentTime := time.Now()
+	temp.Date = currentTime.Format("2006.01.02 15:04:05")
+	temp.Card = "0000 0000 00000"
+
+	return temp
 }
