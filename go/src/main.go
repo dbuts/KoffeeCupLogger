@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-//	"bufio"
 	"os"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
@@ -45,16 +44,20 @@ func main() {
 		log.Fatal(err)
 	}
 
+	fmt.Println("File before operations.")
+	startTemp := marshalConfig(&config, filename)
+	fmt.Println(startTemp)
 	//Testing operations
-	getCheckedOut(&config)
-	getReturned(&config)
+	//getCheckedOut(&config)
+	//getReturned(&config)
 	fmt.Println("Checking in Cup K000002.")
 	checkIn(&config, "K000002")
-	getReturned(&config)
+	//getReturned(&config)
 	fmt.Println("Checking out Random.")
 	var temp Rental = getRandRental()
 	checkOut(&config, temp)
-	getCheckedOut(&config)
+	//getCheckedOut(&config)
+
 
 	//Create backup of yaml and create updated version
 	backup_name := filename[:len(filename)-4] + "_backup.yaml"
@@ -63,7 +66,14 @@ func main() {
 		log.Fatal(err)
 	}
 	//Marshal config back into the .yaml
-	d, err1 := yaml.Marshal(&config)
+	fmt.Println("File after operations.")
+	retTemp := marshalConfig(&config, filename)
+	fmt.Println(retTemp)
+
+}
+
+func marshalConfig (conf *Config, filename string) string{
+	d, err1 := yaml.Marshal(*conf)
 	if err1 !=nil {
 		log.Fatal(err1)
 	} else {
@@ -77,9 +87,9 @@ func main() {
 			fmt.Println(text)
 			log.Fatal(err5)
 		}
-		fmt.Println("Check the .yaml")
 	}
-
+	retString := string(d)
+	return retString
 }
 
 func getCheckedOut(config *Config){
