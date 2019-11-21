@@ -44,19 +44,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println("File before operations.")
-	startTemp := marshalConfig(&config, filename)
-	fmt.Println(startTemp)
-	//Testing operations
-	//getCheckedOut(&config)
-	//getReturned(&config)
-	fmt.Println("Checking in Cup K000002.")
+	fmt.Println("---Checked Out Mugs Before Transaction---")
+	getCheckedOut(&config)
+	fmt.Println("---Checking in Cup K000002---")
 	checkIn(&config, "K000002")
-	//getReturned(&config)
-	fmt.Println("Checking out Random.")
+	fmt.Println("---Checking out New Cup---")
 	var temp Rental = getRandRental()
 	checkOut(&config, temp)
-	//getCheckedOut(&config)
+	getCheckedOut(&config)
 
 
 	//Create backup of yaml and create updated version
@@ -66,9 +61,10 @@ func main() {
 		log.Fatal(err)
 	}
 	//Marshal config back into the .yaml
-	fmt.Println("File after operations.")
 	retTemp := marshalConfig(&config, filename)
-	fmt.Println(retTemp)
+
+	fmt.Println("\n---File after Operations---")
+	fmt.Println("\n\n" + retTemp)
 
 }
 
